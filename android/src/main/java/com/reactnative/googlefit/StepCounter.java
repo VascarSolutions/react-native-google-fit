@@ -53,7 +53,7 @@ public class StepCounter implements OnDataPointListener {
 
         DataSourcesRequest dataSourceRequest = new DataSourcesRequest.Builder()
                 .setDataTypes(DataType.TYPE_STEP_COUNT_DELTA, DataType.TYPE_STEP_COUNT_CUMULATIVE)
-                .setDataSourceTypes( DataSource.TYPE_DERIVED)
+                .setDataSourceTypes( DataSource.TYPE_RAW)
                 .build();
 
         ResultCallback<DataSourcesResult> dataSourcesResultCallback = new ResultCallback<DataSourcesResult>() {
