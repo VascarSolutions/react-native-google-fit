@@ -133,19 +133,17 @@ public class StepHistory {
                 .build()
         );
 
-        /*
         DataSourcesRequest sourceRequest = new DataSourcesRequest.Builder()
                 .setDataTypes(DataType.TYPE_STEP_COUNT_DELTA,
                     DataType.TYPE_STEP_COUNT_CUMULATIVE,
                     DataType.AGGREGATE_STEP_COUNT_DELTA
                     )
-                //.setDataSourceTypes(DataSource.TYPE_DERIVED)
+                .setDataSourceTypes(DataSource.TYPE_RAW)
                 .build();
         DataSourcesResult dataSourcesResult =
            Fitness.SensorsApi.findDataSources(googleFitManager.getGoogleApiClient(), sourceRequest).await(1, TimeUnit.MINUTES);
 
         dataSources.addAll( dataSourcesResult.getDataSources() );
-        */
 
         final AtomicInteger dataSourcesToLoad = new AtomicInteger(dataSources.size());
 
@@ -233,11 +231,7 @@ public class StepHistory {
                         for (Bucket bucket : dataReadResult.getBuckets()) {
                             List<DataSet> dataSets = bucket.getDataSets();
                             for (DataSet dataSet : dataSets) {
-                                String streamId = dataSet.getStreamIdentifier();
-                                if (streamId.toLowerCase().indexOf("user_input") != -1) {
-                                        Log.i(TAG, "Register Fitness Listener: " + type);
-                                        processDataSet(dataSet, steps);
-                                    }
+                                processDataSet(dataSet, steps);
                             }
                         }
                     }
@@ -246,11 +240,7 @@ public class StepHistory {
                     if (dataReadResult.getDataSets().size() > 0) {
                         Log.i(TAG, "  +++ Number of returned DataSets: " + dataReadResult.getDataSets().size());
                         for (DataSet dataSet : dataReadResult.getDataSets()) {
-                            String streamId = dataSet.getStreamIdentifier();
-                                if (streamId.toLowerCase().indexOf("user_input") != -1) {
-                                        Log.i(TAG, "Register Fitness Listener: " + type);
-                                        processDataSet(dataSet, steps);
-                                    }
+                            processDataSet(dataSet, steps);
                         }
                     }
 
