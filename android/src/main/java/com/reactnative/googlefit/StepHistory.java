@@ -158,7 +158,10 @@ public class StepHistory {
 
             Log.i(TAG, "  + StreamID  : " + dataSource.getStreamIdentifier());
             source.putString("id", dataSource.getStreamIdentifier());
-
+            
+            if (dataSource.getStreamIdentifier() != null && dataSource.getStreamIdentifier().indexOf("estimated_steps") == -1 ) {
+                continue;
+            }
             if (dataSource.getAppPackageName() != null) {
                 source.putString("appPackage", dataSource.getAppPackageName());
             } else {
