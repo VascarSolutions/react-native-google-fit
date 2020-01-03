@@ -104,11 +104,11 @@ public class StepHistory {
         List<DataSource> dataSources = new ArrayList<>();
 
         // GoogleFit Apps
-        dataSources.add(
+        /* dataSources.add(
             new DataSource.Builder()
                 .setAppPackageName("com.google.android.gms")
-                .setDataType(DataType.TYPE_LOCATION_SAMPLE)
-                .setType(DataSource.TYPE_RAW)
+                .setDataType(DataType.TYPE_STEP_COUNT_DELTA)
+                .setType(DataSource.TYPE_DERIVED)
                 .setStreamName("estimated_steps")
                 .build()
         );
@@ -117,10 +117,34 @@ public class StepHistory {
         dataSources.add(
             new DataSource.Builder()
                 .setAppPackageName("com.google.android.gms")
-                .setDataType(DataType.TYPE_LOCATION_SAMPLE)
-                .setType(DataSource.TYPE_RAW)
+                .setDataType(DataType.TYPE_STEP_COUNT_DELTA)
+                .setType(DataSource.TYPE_DERIVED)
                 .setStreamName("merge_step_deltas")
                 .build()
+        ); */
+
+        // GoogleFit Apps
+        dataSources.add(
+            Fitness.getSensorsClient(this, GoogleSignIn.getLastSignedInAccount(this))
+                .findDataSources(
+                new DataSourcesRequest.Builder()
+                    .setAppPackageName("com.google.android.gms")
+                    .setDataType(DataType.TYPE_LOCATION_SAMPLE)
+                    .setType(DataSource.TYPE_RAW)
+                    .setStreamName("estimated_steps")
+                    .build()
+        );
+
+         // GoogleFit Apps
+         dataSources.add(
+            Fitness.getSensorsClient(this, GoogleSignIn.getLastSignedInAccount(this))
+                .findDataSources(
+                new DataSourcesRequest.Builder()
+                    .setAppPackageName("com.google.android.gms")
+                    .setDataType(DataType.TYPE_LOCATION_SAMPLE)
+                    .setType(DataSource.TYPE_RAW)
+                    .setStreamName("merge_step_deltas")
+                    .build()
         );
 
         // Mi Fit
