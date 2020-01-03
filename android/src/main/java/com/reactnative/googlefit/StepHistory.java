@@ -107,7 +107,7 @@ public class StepHistory {
         dataSources.add(
             new DataSource.Builder()
                 .setAppPackageName("com.google.android.gms")
-                .setDataType(DataType.TYPE_STEP_COUNT_DELTA)
+                .setDataType(DataType.TYPE_LOCATION_SAMPLE)
                 .setType(DataSource.TYPE_RAW)
                 .setStreamName("estimated_steps")
                 .build()
@@ -117,7 +117,7 @@ public class StepHistory {
         dataSources.add(
             new DataSource.Builder()
                 .setAppPackageName("com.google.android.gms")
-                .setDataType(DataType.TYPE_STEP_COUNT_DELTA)
+                .setDataType(DataType.TYPE_LOCATION_SAMPLE)
                 .setType(DataSource.TYPE_RAW)
                 .setStreamName("merge_step_deltas")
                 .build()
