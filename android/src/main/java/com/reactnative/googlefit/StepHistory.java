@@ -111,10 +111,10 @@ public class StepHistory {
                 .setType(DataSource.TYPE_DERIVED)
                 .setStreamName("estimated_steps")
                 .build()
-        );
+        ); */
 
         // GoogleFit Apps
-        dataSources.add(
+        /* dataSources.add(
             new DataSource.Builder()
                 .setAppPackageName("com.google.android.gms")
                 .setDataType(DataType.TYPE_STEP_COUNT_DELTA)
@@ -133,6 +133,7 @@ public class StepHistory {
                     .setType(DataSource.TYPE_RAW)
                     .setStreamName("estimated_steps")
                     .build()
+                )
         );
 
          // GoogleFit Apps
@@ -145,6 +146,7 @@ public class StepHistory {
                     .setType(DataSource.TYPE_RAW)
                     .setStreamName("merge_step_deltas")
                     .build()
+                )
         );
 
         // Mi Fit
