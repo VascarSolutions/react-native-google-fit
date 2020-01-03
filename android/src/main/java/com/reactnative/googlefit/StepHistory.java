@@ -104,49 +104,23 @@ public class StepHistory {
         List<DataSource> dataSources = new ArrayList<>();
 
         // GoogleFit Apps
-        /* dataSources.add(
+        dataSources.add(
             new DataSource.Builder()
                 .setAppPackageName("com.google.android.gms")
                 .setDataType(DataType.TYPE_STEP_COUNT_DELTA)
                 .setType(DataSource.TYPE_DERIVED)
                 .setStreamName("estimated_steps")
                 .build()
-        ); */
+        );
 
         // GoogleFit Apps
-        /* dataSources.add(
+        dataSources.add(
             new DataSource.Builder()
                 .setAppPackageName("com.google.android.gms")
                 .setDataType(DataType.TYPE_STEP_COUNT_DELTA)
                 .setType(DataSource.TYPE_DERIVED)
                 .setStreamName("merge_step_deltas")
                 .build()
-        ); */
-
-        // GoogleFit Apps
-        dataSources.add(
-            Fitness.getSensorsClient(this, GoogleSignIn.getLastSignedInAccount(this))
-                .findDataSources(
-                new DataSourcesRequest.Builder()
-                    .setAppPackageName("com.google.android.gms")
-                    .setDataType(DataType.TYPE_LOCATION_SAMPLE)
-                    .setType(DataSource.TYPE_RAW)
-                    .setStreamName("estimated_steps")
-                    .build()
-                )
-        );
-
-         // GoogleFit Apps
-         dataSources.add(
-            Fitness.getSensorsClient(this, GoogleSignIn.getLastSignedInAccount(this))
-                .findDataSources(
-                new DataSourcesRequest.Builder()
-                    .setAppPackageName("com.google.android.gms")
-                    .setDataType(DataType.TYPE_LOCATION_SAMPLE)
-                    .setType(DataSource.TYPE_RAW)
-                    .setStreamName("merge_step_deltas")
-                    .build()
-                )
         );
 
         // Mi Fit
@@ -247,7 +221,7 @@ public class StepHistory {
                         .build();
             }
 
-            PendingResult<DataReadResult> readPendingResult = Fitness.HistoryApi.readData(googleFitManager.getGoogleApiClient(), readRequest);
+            PendingResult<DataReadResult> readPendingResult = Fitness.HistoryApi.readDailyTotalFromLocalDevice(googleFitManager.getGoogleApiClient(), readRequest);
             readPendingResult.setResultCallback(new ResultCallback<DataReadResult>() {
                 @Override
                 public void onResult(@NonNull DataReadResult dataReadResult) {
@@ -259,7 +233,11 @@ public class StepHistory {
                         for (Bucket bucket : dataReadResult.getBuckets()) {
                             List<DataSet> dataSets = bucket.getDataSets();
                             for (DataSet dataSet : dataSets) {
-                                processDataSet(dataSet, steps);
+                                String streamId = dataSet.getStreamIdentifier();
+                                if (streamId.toLowerCase().indexOf("user_input") != -1) {
+                                        Log.i(TAG, "Register Fitness Listener: " + type);
+                                        processDataSet(dataSet, steps);
+                                    }
                             }
                         }
                     }
@@ -268,7 +246,11 @@ public class StepHistory {
                     if (dataReadResult.getDataSets().size() > 0) {
                         Log.i(TAG, "  +++ Number of returned DataSets: " + dataReadResult.getDataSets().size());
                         for (DataSet dataSet : dataReadResult.getDataSets()) {
-                            processDataSet(dataSet, steps);
+                            String streamId = dataSet.getStreamIdentifier();
+                                if (streamId.toLowerCase().indexOf("user_input") != -1) {
+                                        Log.i(TAG, "Register Fitness Listener: " + type);
+                                        processDataSet(dataSet, steps);
+                                    }
                         }
                     }
 
