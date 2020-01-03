@@ -62,13 +62,11 @@ public class StepCounter implements OnDataPointListener {
                 for (DataSource dataSource : dataSourcesResult.getDataSources()) {
                     DataType type = dataSource.getDataType();
 
-                    if (DataType.TYPE_STEP_COUNT_DELTA.equals(type) || DataType.TYPE_STEP_COUNT_DELTA.equals(type)) { 
-                        String streamId = dataSource.getStreamIdentifier();
-                        if (streamId.toLowerCase().indexOf("user_input") != -1) {
-                                Log.i(TAG, "Register Fitness Listener: " + type);
-                                registerFitnessDataListener(dataSource, type);//DataType.TYPE_STEP_COUNT_DELTA);
-                            }
-                        }
+                    if (DataType.TYPE_STEP_COUNT_DELTA.equals(type)
+                            || DataType.TYPE_STEP_COUNT_CUMULATIVE.equals(type)) {
+                        Log.i(TAG, "Register Fitness Listener: " + type);
+                        registerFitnessDataListener(dataSource, type);//DataType.TYPE_STEP_COUNT_DELTA);
+                    }
                 }
             }
         };

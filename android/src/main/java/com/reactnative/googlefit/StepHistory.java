@@ -133,17 +133,18 @@ public class StepHistory {
                 .build()
         );
 
+        /*
         DataSourcesRequest sourceRequest = new DataSourcesRequest.Builder()
                 .setDataTypes(DataType.TYPE_STEP_COUNT_DELTA,
                     DataType.TYPE_STEP_COUNT_CUMULATIVE,
                     DataType.AGGREGATE_STEP_COUNT_DELTA
                     )
-                .setDataSourceTypes(DataSource.TYPE_RAW)
+                //.setDataSourceTypes(DataSource.TYPE_DERIVED)
                 .build();
         DataSourcesResult dataSourcesResult =
            Fitness.SensorsApi.findDataSources(googleFitManager.getGoogleApiClient(), sourceRequest).await(1, TimeUnit.MINUTES);
-
         dataSources.addAll( dataSourcesResult.getDataSources() );
+        */
 
         final AtomicInteger dataSourcesToLoad = new AtomicInteger(dataSources.size());
 
@@ -219,7 +220,7 @@ public class StepHistory {
                         .build();
             }
 
-            PendingResult<DataReadResult> readPendingResult = Fitness.HistoryApi.readDailyTotalFromLocalDevice(googleFitManager.getGoogleApiClient(), readRequest);
+            PendingResult<DataReadResult> readPendingResult = Fitness.HistoryApi.readData(googleFitManager.getGoogleApiClient(), readRequest);
             readPendingResult.setResultCallback(new ResultCallback<DataReadResult>() {
                 @Override
                 public void onResult(@NonNull DataReadResult dataReadResult) {
