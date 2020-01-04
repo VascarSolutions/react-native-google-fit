@@ -104,17 +104,17 @@ public class StepHistory {
         List<DataSource> dataSources = new ArrayList<>();
 
         // GoogleFit Apps
-        dataSources.add(
+        /* dataSources.add(
             new DataSource.Builder()
                 .setAppPackageName("com.google.android.gms")
                 .setDataType(DataType.TYPE_STEP_COUNT_DELTA)
                 .setType(DataSource.TYPE_DERIVED)
                 .setStreamName("estimated_steps")
                 .build()
-        );
+        ); */
 
         // GoogleFit Apps
-        /* dataSources.add(
+        dataSources.add(
             new DataSource.Builder()
                 .setAppPackageName("com.google.android.gms")
                 .setDataType(DataType.TYPE_STEP_COUNT_DELTA)
@@ -131,7 +131,7 @@ public class StepHistory {
                 .setType(DataSource.TYPE_RAW)
                 .setStreamName("")
                 .build()
-        ); */
+        );
 
         /*
         DataSourcesRequest sourceRequest = new DataSourcesRequest.Builder()
@@ -158,10 +158,7 @@ public class StepHistory {
 
             Log.i(TAG, "  + StreamID  : " + dataSource.getStreamIdentifier());
             source.putString("id", dataSource.getStreamIdentifier());
-            
-            if (dataSource.getStreamIdentifier() != null && dataSource.getStreamIdentifier().indexOf("estimated_steps") == -1 ) {
-                continue;
-            }
+
             if (dataSource.getAppPackageName() != null) {
                 source.putString("appPackage", dataSource.getAppPackageName());
             } else {
