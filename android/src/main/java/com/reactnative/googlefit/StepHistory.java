@@ -104,14 +104,14 @@ public class StepHistory {
         List<DataSource> dataSources = new ArrayList<>();
 
         // GoogleFit Apps
-        /* dataSources.add(
+        dataSources.add(
             new DataSource.Builder()
                 .setAppPackageName("com.google.android.gms")
                 .setDataType(DataType.TYPE_STEP_COUNT_DELTA)
                 .setType(DataSource.TYPE_DERIVED)
                 .setStreamName("estimated_steps")
                 .build()
-        ); */
+        );
 
         // GoogleFit Apps
         dataSources.add(
