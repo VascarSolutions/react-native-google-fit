@@ -306,7 +306,7 @@ public class StepHistory {
 
         for (DataPoint dp : dataSet.getDataPoints()) {
             if ( dp!=null && dp.getOriginalDataSource() != null ) {
-                Log.i(TAG,"streamIdentifier:" + dp.getOriginalDataSource().getStreamIdentifier())
+                Log.i(TAG,"streamIdentifier:" + dp.getOriginalDataSource().getStreamIdentifier());
                 }
             Log.i(TAG, "\tData point:");
             Log.i(TAG, "\t\tType : " + dp.getDataType().getName());
