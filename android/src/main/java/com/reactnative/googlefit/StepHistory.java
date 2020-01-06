@@ -305,6 +305,9 @@ public class StepHistory {
         WritableMap stepMap = Arguments.createMap();
 
         for (DataPoint dp : dataSet.getDataPoints()) {
+            if ( dp!=null && dp.getOriginalDataSource() != null ) {
+                Log.i(TAG,"streamIdentifier:" + dp.getOriginalDataSource().getStreamIdentifier())
+                }
             Log.i(TAG, "\tData point:");
             Log.i(TAG, "\t\tType : " + dp.getDataType().getName());
             Log.i(TAG, "\t\tStart: " + dateFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS)));
