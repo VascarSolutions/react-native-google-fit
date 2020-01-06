@@ -284,7 +284,7 @@ public class StepHistory {
         for (final DataPoint dp : dataSet.getDataPoints()) {
             if (dp != null && dp.getOriginalDataSource() != null) {
                 final String streamId = dp.getOriginalDataSource().getStreamIdentifier();
-                Log.i(TAG, "streamIdentifier:" + streamid);
+                Log.i(TAG, "streamIdentifier:" + streamId);
                 if (streamId != null && streamId.indexOf("user_input") == -1) {
                     Log.i(TAG, "\tData point:");
                     Log.i(TAG, "\t\tType : " + dp.getDataType().getName());
