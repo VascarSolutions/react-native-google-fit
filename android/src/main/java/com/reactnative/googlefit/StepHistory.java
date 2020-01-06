@@ -305,7 +305,7 @@ public class StepHistory {
         WritableMap stepMap = Arguments.createMap();
 
         for (DataPoint dp : dataSet.getDataPoints()) {
-            if(dp.getOriginalDataSource().getStreamName() != "user_input"){
+            if(dp.getOriginalDataSource().getStreamName() == "estimated_steps"){
                 if ( dp!=null && dp.getOriginalDataSource() != null ) {
                     Log.i(TAG,"streamIdentifier:" + dp.getOriginalDataSource().getStreamIdentifier());
                     }
