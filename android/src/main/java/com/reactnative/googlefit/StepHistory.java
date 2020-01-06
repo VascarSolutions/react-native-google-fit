@@ -73,7 +73,7 @@ public class StepHistory {
             .build();
 
         DataReadResult dataReadResult =
-            Fitness.HistoryApi.readDailyTotalFromLocalDevice(googleFitManager.getGoogleApiClient(), DataType.TYPE_STEP_COUNT_DELTA).await(1, TimeUnit.MINUTES);
+            Fitness.HistoryApi.readData(googleFitManager.getGoogleApiClient(), readRequest).await(1, TimeUnit.MINUTES);
 
         DataSet stepData = dataReadResult.getDataSet(DataType.TYPE_STEP_COUNT_DELTA);
     
@@ -81,8 +81,10 @@ public class StepHistory {
 
         for (DataPoint dp : stepData.getDataPoints()) {
             for(Field field : dp.getDataType().getFields()) {
-                int steps = dp.getValue(field).asInt();
-                userInputSteps += steps;
+                if("user_input".equals(dp.getOriginalDataSource().getStreamName())){
+                    int steps = dp.getValue(field).asInt();
+                    userInputSteps += steps;
+                }
             }
         }
       
@@ -118,16 +120,6 @@ public class StepHistory {
                 .setDataType(DataType.TYPE_STEP_COUNT_DELTA)
                 .setType(DataSource.TYPE_DERIVED)
                 .setStreamName("merge_step_deltas")
-                .build()
-        );
-
-        // GoogleFit Apps
-        dataSources.add(
-            new DataSource.Builder()
-                .setAppPackageName("com.google.android.gms")
-                .setDataType(DataType.TYPE_STEP_COUNT_DELTA)
-                .setType(DataSource.TYPE_DERIVED)
-                .setStreamName("soft_step_delta")
                 .build()
         );
 
@@ -313,23 +305,26 @@ public class StepHistory {
         WritableMap stepMap = Arguments.createMap();
 
         for (DataPoint dp : dataSet.getDataPoints()) {
-            if(dp.getOriginalDataSource().getStreamName() == "soft_step_delta"){
+            if(dp.getOriginalDataSource().getStreamName() == "estimated_steps"){
                 if ( dp!=null && dp.getOriginalDataSource() != null ) {
-                    Log.i(TAG,"streamIdentifier:" + dp.getOriginalDataSource().getStreamIdentifier());
+                    String streamId = dp.getOriginalDataSource().getStreamIdentifier();
+                    Log.i(TAG,"streamIdentifier:" + streamid);
+                    if (streamId != null && streamId.indexOf("user_input") == -1 ) {
+                        Log.i(TAG, "\tData point:");
+                        Log.i(TAG, "\t\tType : " + dp.getDataType().getName());
+                        Log.i(TAG, "\t\tStart: " + dateFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS)));
+                        Log.i(TAG, "\t\tEnd  : " + dateFormat.format(dp.getEndTime(TimeUnit.MILLISECONDS)));
+            
+                        for(Field field : dp.getDataType().getFields()) {
+                            Log.i(TAG, "\t\tField: " + field.getName() +
+                                    " Value: " + dp.getValue(field));
+            
+                            stepMap.putDouble("startDate", dp.getStartTime(TimeUnit.MILLISECONDS));
+                            stepMap.putDouble("endDate", dp.getEndTime(TimeUnit.MILLISECONDS));
+                            stepMap.putDouble("steps", dp.getValue(field).asInt());
+                            map.pushMap(stepMap);
+                        }
                     }
-                Log.i(TAG, "\tData point:");
-                Log.i(TAG, "\t\tType : " + dp.getDataType().getName());
-                Log.i(TAG, "\t\tStart: " + dateFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS)));
-                Log.i(TAG, "\t\tEnd  : " + dateFormat.format(dp.getEndTime(TimeUnit.MILLISECONDS)));
-    
-                for(Field field : dp.getDataType().getFields()) {
-                    Log.i(TAG, "\t\tField: " + field.getName() +
-                            " Value: " + dp.getValue(field));
-    
-                    stepMap.putDouble("startDate", dp.getStartTime(TimeUnit.MILLISECONDS));
-                    stepMap.putDouble("endDate", dp.getEndTime(TimeUnit.MILLISECONDS));
-                    stepMap.putDouble("steps", dp.getValue(field).asInt());
-                    map.pushMap(stepMap);
                 }
             }
         }
