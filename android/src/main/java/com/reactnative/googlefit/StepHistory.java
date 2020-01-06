@@ -73,7 +73,7 @@ public class StepHistory {
             .build();
 
         DataReadResult dataReadResult =
-            Fitness.HistoryApi.readDailyTotalFromLocalDevice(googleFitManager.getGoogleApiClient(), DataType.TYPE_STEP_COUNT_DELTA).await(1, TimeUnit.MINUTES)
+            Fitness.HistoryApi.readDailyTotalFromLocalDevice(googleFitManager.getGoogleApiClient(), DataType.TYPE_STEP_COUNT_DELTA).await(1, TimeUnit.MINUTES);
 
         DataSet stepData = dataReadResult.getDataSet(DataType.TYPE_STEP_COUNT_DELTA);
     
