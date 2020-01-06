@@ -73,7 +73,7 @@ public class StepHistory {
             .build();
 
         DataReadResult dataReadResult =
-            Fitness.HistoryApi.readData(googleFitManager.getGoogleApiClient(), readRequest).await(1, TimeUnit.MINUTES);
+            Fitness.HistoryApi.readDailyTotalFromLocalDevice(googleFitManager.getGoogleApiClient(), readRequest).await(1, TimeUnit.MINUTES);
 
         DataSet stepData = dataReadResult.getDataSet(DataType.TYPE_STEP_COUNT_DELTA);
     
@@ -81,10 +81,8 @@ public class StepHistory {
 
         for (DataPoint dp : stepData.getDataPoints()) {
             for(Field field : dp.getDataType().getFields()) {
-                if("user_input".equals(dp.getOriginalDataSource().getStreamName())){
-                    int steps = dp.getValue(field).asInt();
-                    userInputSteps += steps;
-                }
+                int steps = dp.getValue(field).asInt();
+                userInputSteps += steps;
             }
         }
       
@@ -120,6 +118,16 @@ public class StepHistory {
                 .setDataType(DataType.TYPE_STEP_COUNT_DELTA)
                 .setType(DataSource.TYPE_DERIVED)
                 .setStreamName("merge_step_deltas")
+                .build()
+        );
+
+        // GoogleFit Apps
+        dataSources.add(
+            new DataSource.Builder()
+                .setAppPackageName("com.google.android.gms")
+                .setDataType(DataType.TYPE_STEP_COUNT_DELTA)
+                .setType(DataSource.TYPE_DERIVED)
+                .setStreamName("soft_step_delta")
                 .build()
         );
 
@@ -305,7 +313,7 @@ public class StepHistory {
         WritableMap stepMap = Arguments.createMap();
 
         for (DataPoint dp : dataSet.getDataPoints()) {
-            if(dp.getOriginalDataSource().getStreamName() == "estimated_steps"){
+            if(dp.getOriginalDataSource().getStreamName() == "soft_step_delta"){
                 if ( dp!=null && dp.getOriginalDataSource() != null ) {
                     Log.i(TAG,"streamIdentifier:" + dp.getOriginalDataSource().getStreamIdentifier());
                     }
