@@ -282,16 +282,16 @@ public class StepHistory {
         final WritableMap stepMap = Arguments.createMap();
 
         for (final DataPoint dp : dataSet.getDataPoints()) {
-            if (dp != null && dp.getOriginalDataSource() != null) {
-                final String streamId = dp.getOriginalDataSource().getStreamIdentifier();
-                Log.i(TAG, "streamIdentifier:" + streamId);
-                if (streamId != null && streamId.indexOf("user_input") == -1) {
-                    Log.i(TAG, "\tData point:");
-                    Log.i(TAG, "\t\tType : " + dp.getDataType().getName());
-                    Log.i(TAG, "\t\tStart: " + dateFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS)));
-                    Log.i(TAG, "\t\tEnd  : " + dateFormat.format(dp.getEndTime(TimeUnit.MILLISECONDS)));
-
-                    for (final Field field : dp.getDataType().getFields()) {
+            Log.i(TAG, "\tData point:");
+            Log.i(TAG, "\t\tType : " + dp.getDataType().getName());
+            Log.i(TAG, "\t\tStart: " + dateFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS)));
+            Log.i(TAG, "\t\tEnd  : " + dateFormat.format(dp.getEndTime(TimeUnit.MILLISECONDS)));
+            
+            for (final Field field : dp.getDataType().getFields()) {
+                if (dp != null && dp.getOriginalDataSource() != null) {
+                    final String streamId = dp.getOriginalDataSource().getStreamIdentifier();
+                    Log.i(TAG, "streamIdentifier:" + streamId);
+                    if (streamId != null && streamId.indexOf("user_input") == -1) {
                         Log.i(TAG, "\t\tField: " + field.getName() + " Value: " + dp.getValue(field));
 
                         stepMap.putDouble("startDate", dp.getStartTime(TimeUnit.MILLISECONDS));
